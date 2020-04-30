@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.HashMap;
 
 class FindingPairs {
-    public static int N = 8;
+    public static int N = 4;
     public static DecThread[] threads;
     public static HashMap<String,String> f2HashMap = new HashMap<>();
     public static List<Integer> f1Checked;
