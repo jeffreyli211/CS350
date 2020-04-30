@@ -33,7 +33,7 @@ public class Hash {
         }
     }
 
-    public static String find_F2(int num1, int num2) {
+    public static String find_F2(int num1, int num2) {          // Alternate hash method to hash strings of the form "string1,string2"
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             String str1 = Integer.toString(num1);

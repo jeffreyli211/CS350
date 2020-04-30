@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.HashSet;
 
 class FindingPairs {
-    public static int N = 4;
+    public static int N = 8;
     public static DecThread[] threads = new DecThread[N];
     public static HashSet<String> f2HashSet = new HashSet<>();
     public static int[] f1Checked;
@@ -28,6 +28,7 @@ class FindingPairs {
             f2HashSet.add(ln);
         }
 
+        /* Create the chunks, specifying their range a,b */
         int size = f1_decoded.size() / N;
         int ID = 0;
         int a = 0;
@@ -41,7 +42,7 @@ class FindingPairs {
             b += size;
             ID++;
         }
-        if (f1_decoded.size() % N != 0) {
+        if (f1_decoded.size() % N != 0) {       // Accounts for the size of F1 not fitting evenly into the number of threads/chunks.
             ID--;
             List<Integer> lastChunk = f1_decoded.subList(a, f1_decoded.size());
             threads[ID] = new DecThread(f1_decoded, lastChunk, f2HashSet, Integer.toString(ID));
@@ -59,9 +60,9 @@ class FindingPairs {
 }
 
 class DecThread extends Thread {
-        private List<Integer> lines;
-        private List<Integer> chunk;
-        private HashSet<String> f2;
+        private List<Integer> lines;        // All F1 lines.
+        private List<Integer> chunk;        // The specific sublist of lines that this thread is responsible for.
+        private HashSet<String> f2;         // The whole F2 HashMap.
         DecThread (List<Integer> whole, List<Integer> piece, HashSet<String> f2, String name) {
             super (name);
             this.lines = whole;
@@ -77,17 +78,17 @@ class DecThread extends Thread {
 
         public void run() {
             for (int i = 0; i <= this.chunk.size()-1; i++) {
-                int num1 = chunk.get(i);
-                int index_f1 = lines.indexOf(num1);
-                if (FindingPairs.f1Checked[index_f1] == 1) {        // This number has already be paired.
+                int num1 = chunk.get(i);                            // i is the index that iterates through the chunk/sublist responsible.
+                int index_f1 = lines.indexOf(num1);                 // The actual number in F1 that i corresponds to.
+                if (FindingPairs.f1Checked[index_f1] == 1) {        // If this number has already been paired.
                     continue;
                 }
                 else {
-                    for (int j = 0; j <= this.lines.size()-1; j++) {
+                    for (int j = 0; j <= this.lines.size()-1; j++) {                // j is the index that iterates through all lines in F1 until its correct pairing is found in F2.
                         if (FindingPairs.f1Checked[j] == 1 || index_f1 == j) {      // This jth number was already paired OR it is the same number as i, ignore.
                             continue;
                         }
-                        else {
+                        else {          // This pairing could possibly be correct, so now we check.
                             int num2 = lines.get(j);
                             String concat = Hash.find_F2(num1, num2);
                             if (f2.contains(concat)) {
