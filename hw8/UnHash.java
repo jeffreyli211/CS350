@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class UnHash {
-    public static int unchecked_i = 0;
-    public static List<String> found = new ArrayList<String>();
+    private static int unchecked_i = 0;
+    private static List<String> found = new ArrayList<String>();
     public static boolean exists(String hash) {
         return found.contains(hash);
     }
